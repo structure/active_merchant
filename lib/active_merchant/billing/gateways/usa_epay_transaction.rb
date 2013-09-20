@@ -6,6 +6,7 @@ module ActiveMerchant #:nodoc:
 
       self.supported_cardtypes = [:visa, :master, :american_express]
       self.supported_countries = ['US']
+      self.default_currency = 'USD'
       self.homepage_url = 'http://www.usaepay.com/'
       self.display_name = 'USA ePay'
 
@@ -25,7 +26,7 @@ module ActiveMerchant #:nodoc:
       def authorize(money, credit_card, options = {})
         post = {}
 
-        add_amount(post, money)
+        add_amount(post, money, options)
         add_invoice(post, options)
         add_credit_card(post, credit_card)
         add_address(post, credit_card, options)
@@ -37,7 +38,7 @@ module ActiveMerchant #:nodoc:
       def purchase(money, credit_card, options = {})
         post = {}
 
-        add_amount(post, money)
+        add_amount(post, money, options)
         add_invoice(post, options)
         add_credit_card(post, credit_card)
         add_address(post, credit_card, options)
@@ -49,14 +50,14 @@ module ActiveMerchant #:nodoc:
       def capture(money, authorization, options = {})
         post = { :refNum => authorization }
 
-        add_amount(post, money)
+        add_amount(post, money, options)
         commit(:capture, post)
       end
 
       def refund(money, authorization, options = {})
         post = { :refNum => authorization }
 
-        add_amount(post, money)
+        add_amount(post, money, options)
         commit(:refund, post)
       end
 
@@ -67,8 +68,9 @@ module ActiveMerchant #:nodoc:
 
       private
 
-      def add_amount(post, money)
+      def add_amount(post, money, options)
         post[:amount] = amount(money)
+        post[:currency] = options[:currency] || currency(money)
       end
 
       def expdate(credit_card)
