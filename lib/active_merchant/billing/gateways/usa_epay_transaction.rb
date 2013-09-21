@@ -6,7 +6,6 @@ module ActiveMerchant #:nodoc:
 
       self.supported_cardtypes = [:visa, :master, :american_express]
       self.supported_countries = ['US']
-      self.default_currency = 'USD'
       self.homepage_url = 'http://www.usaepay.com/'
       self.display_name = 'USA ePay'
 
@@ -70,7 +69,7 @@ module ActiveMerchant #:nodoc:
 
       def add_amount(post, money, options)
         post[:amount] = amount(money)
-        post[:currency] = options[:currency] || currency(money)
+        post[:currency] = options[:currency] if options[:currency]
       end
 
       def expdate(credit_card)
