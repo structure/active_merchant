@@ -8,6 +8,17 @@ module ActiveMerchant #:nodoc:
       self.supported_countries = ['US']
       self.supported_cardtypes = [:visa, :master, :american_express, :discover]
 
+      class CrippledSslConnection < ActiveMerchant::Connection
+        def configure_ssl(http)
+          super(http)
+          http.ssl_version = :SSLv3
+        end
+      end
+
+      def new_connection(endpoint)
+        CrippledSslConnection.new(endpoint)
+      end
+
       private
       def add_creditcard(post, creditcard, options={})
         super
