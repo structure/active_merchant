@@ -537,6 +537,10 @@ realex_mastercard_coms_error:
   year: '2020'
   verification_value: '123'
 
+rocketgate:
+ login: '1'
+ password: 'testpassword'
+
 samurai:
   login: 'a1ebafb6da5238fb8a3ac9f6'
   password: 'ae1aa640f6b735c4730fbb56'
