@@ -246,7 +246,12 @@ module ActiveMerchant #:nodoc:
 #
 ######################################################################
 # 
-      def credit(money, authorization, options = {})
+     def credit(money, authorization, options = {})
+        deprecated CREDIT_DEPRECATION_MESSAGE        
+        refund(money, authorization, options = {})
+     end
+
+     def refund(money, authorization, options = {})
 	request = RocketGate::GatewayRequest.new
 	response = RocketGate::GatewayResponse.new
 	service = RocketGate::GatewayService.new
