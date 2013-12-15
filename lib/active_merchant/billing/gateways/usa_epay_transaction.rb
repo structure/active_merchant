@@ -181,7 +181,10 @@ module ActiveMerchant #:nodoc:
           :error            => fields['UMerror'],
           :error_code       => fields['UMerrorcode'],
           :acs_url          => fields['UMacsurl'],
-          :payload          => fields['UMpayload']
+          :payload          => fields['UMpayload'],
+          :converted_amount => fields['UMconvertedAmount'],
+          :converted_amount_currency => fields['UMconvertedAmountCurrency'],
+          :conversion_rate  => fields['UMconversionRate']
         }.delete_if{|k, v| v.nil?}
       end
 
