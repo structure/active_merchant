@@ -32,7 +32,7 @@ module ActiveMerchant #:nodoc:
       #
       # Pass in +order_id+ and optionally a +customer+ parameter.
       def authorize(money, creditcard, options = {})
-        debit_commit 'us_preauth', money, creditcard, options
+        debit_commit (options[:cavv] ? 'us_cavv_preauth' : 'us_preauth'), money, creditcard, options
       end
 
       # This action verifies funding on a customer's card, and readies them for
@@ -40,7 +40,7 @@ module ActiveMerchant #:nodoc:
       #
       # Pass in <tt>order_id</tt> and optionally a <tt>customer</tt> parameter
       def purchase(money, creditcard, options = {})
-        debit_commit 'us_purchase', money, creditcard, options
+        debit_commit (options[:cavv] ? 'us_cavv_purchase' : 'us_purchase'), money, creditcard, options
       end
 
       # This method retrieves locked funds from a customer's account (from a
@@ -98,6 +98,7 @@ module ActiveMerchant #:nodoc:
           :amount     => amount(money),
           :pan        => creditcard.number,
           :expdate    => expdate(creditcard),
+          :cavv       => options[:cavv],
           :crypt_type => options[:crypt_type] || @options[:crypt_type]
         }
       end
@@ -169,7 +170,7 @@ module ActiveMerchant #:nodoc:
         actions[action].each do |key|
           transaction.add_element(key.to_s).text = parameters[key] unless parameters[key].blank?
         end
-
+        
         xml.to_s
       end
 
